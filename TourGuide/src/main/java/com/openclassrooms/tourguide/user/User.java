@@ -74,7 +74,10 @@ public class User {
 			userRewards.add(userReward);
 		}
 	}
-	
+
+	public void addUserRewards(List<UserReward> userRewards){
+	}
+
 	public List<UserReward> getUserRewards() {
 		return userRewards;
 	}

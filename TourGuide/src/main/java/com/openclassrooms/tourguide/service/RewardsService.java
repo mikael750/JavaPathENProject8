@@ -1,6 +1,9 @@
 package com.openclassrooms.tourguide.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -36,27 +39,38 @@ public class RewardsService {
 		proximityBuffer = defaultProximityBuffer;
 	}
 
+	/**
+	 * @param user
+	 */
 	public void calculateRewards(User user) {
 		var userLocations = user.getVisitedLocations();
 		var attractions = gpsUtil.getAttractions();
+		List<UserReward> rewardsToAdd = new ArrayList<>();
+		//Set<String> rewardedAttractions = new HashSet<>();
 
+		synchronized (user.getUserRewards()) {
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
-				if(user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName)).count() == 0) {
-					if(nearAttraction(visitedLocation, attraction)) {
-						user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
+				if(user.getUserRewards().stream().noneMatch(r ->
+						r.attraction.attractionName.equals(attraction.attractionName))) {
+					if(nearAttraction(visitedLocation, attraction)) { //!rewardedAttractions.contains(attraction.attractionName) &&
+						rewardsToAdd.add(new UserReward(visitedLocation, attraction,
+								getRewardPoints(attraction, user)));
+						//rewardedAttractions.add(attraction.attractionName);
 					}
 				}
 			}
 		}
+		user.addUserRewards(rewardsToAdd);
+		}
 	}
 	
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-		return getDistance(attraction, location) > attractionProximityRange ? false : true;
+		return !(getDistance(attraction, location) > attractionProximityRange);
 	}
 	
 	private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
-		return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
+		return !(getDistance(attraction, visitedLocation.location) > proximityBuffer);
 	}
 	
 	private int getRewardPoints(Attraction attraction, User user) {

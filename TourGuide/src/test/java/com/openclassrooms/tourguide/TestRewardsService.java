@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,10 +23,18 @@ import com.openclassrooms.tourguide.user.UserReward;
 
 public class TestRewardsService {
 
+	private RewardsService rewardsService;
+	private GpsUtil gpsUtil;
+
+	@BeforeEach
+	public void setUp() {
+		gpsUtil = new GpsUtil();
+		rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+
+	}
+
 	@Test
 	public void userGetRewards() {
-		var gpsUtil = new GpsUtil();
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
 
 		InternalTestHelper.setInternalUserNumber(0);
 		var tourGuideService = new TourGuideService(gpsUtil, rewardsService);
@@ -41,8 +50,7 @@ public class TestRewardsService {
 
 	@Test
 	public void isWithinAttractionProximity() {
-		var gpsUtil = new GpsUtil();
-		var rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+
 		var attraction = gpsUtil.getAttractions().get(0);
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
@@ -50,8 +58,7 @@ public class TestRewardsService {
 	@Disabled // Needs fixed - can throw ConcurrentModificationException
 	@Test
 	public void nearAllAttractions() {
-		var gpsUtil = new GpsUtil();
-		var rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
 		InternalTestHelper.setInternalUserNumber(1);
