@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.util.UUID;
 
+import com.openclassrooms.tourguide.repository.AttractionRepository;
+import com.openclassrooms.tourguide.service.GpsUtilService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,10 +24,13 @@ public class TestRewardsService {
 
 	private RewardsService rewardsService;
 	private GpsUtil gpsUtil;
+	private GpsUtilService gpsUtilService;
 
 	@BeforeEach
 	public void setUp() {
 		gpsUtil = new GpsUtil();
+		AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
+		gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
 		rewardsService = new RewardsService(gpsUtil, new RewardCentral());
 
 	}
@@ -34,7 +39,7 @@ public class TestRewardsService {
 	public void userGetRewards() {
 
 		InternalTestHelper.setInternalUserNumber(0);
-		var tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		var user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		var attraction = gpsUtil.getAttractions().get(0);
@@ -49,17 +54,17 @@ public class TestRewardsService {
 	public void isWithinAttractionProximity() {
 
 		var attraction = gpsUtil.getAttractions().get(0);
-		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
+		assertTrue(gpsUtilService.isWithinAttractionProximity(attraction, attraction));
 	}
 
 	@Disabled // Needs fixed - can throw ConcurrentModificationException
 	@Test
 	public void nearAllAttractions() {
 
-		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
+		gpsUtilService.setProximityBuffer(Integer.MAX_VALUE);
 
 		InternalTestHelper.setInternalUserNumber(1);
-		var tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
 		var userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));

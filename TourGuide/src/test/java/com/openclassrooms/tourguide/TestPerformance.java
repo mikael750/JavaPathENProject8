@@ -7,7 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.openclassrooms.tourguide.repository.AttractionRepository;
+import com.openclassrooms.tourguide.service.GpsUtilService;
 import org.apache.commons.lang3.time.StopWatch;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +25,15 @@ import com.openclassrooms.tourguide.model.User;
 
 public class TestPerformance {
 
+	private GpsUtil gpsUtil;
+	private GpsUtilService gpsUtilService;
+
+	@BeforeEach
+	public void setUp() {
+		gpsUtil = new GpsUtil();
+		AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
+		gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
+	}
 	/*
 	 * A note on performance improvements:
 	 * 
@@ -53,7 +65,7 @@ public class TestPerformance {
 		// Users should be incremented up to 100,000, and test finishes within 15
 		// minutes
 		InternalTestHelper.setInternalUserNumber(100);
-		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
@@ -82,7 +94,7 @@ public class TestPerformance {
 		InternalTestHelper.setInternalUserNumber(100);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		Attraction attraction = gpsUtil.getAttractions().get(0);
 		List<User> allUsers = new ArrayList<>();
