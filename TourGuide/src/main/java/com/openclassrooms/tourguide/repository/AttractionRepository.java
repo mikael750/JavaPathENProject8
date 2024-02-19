@@ -18,9 +18,7 @@ public class AttractionRepository {
     }
 
     public static List<Attraction> getAttractions() {
-        if (attractions.size() == 0) {
-            attractions = gpsUtil.getAttractions();
-        }
+        attractions = gpsUtil.getAttractions();
         return attractions;
     }
 }

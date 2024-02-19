@@ -25,12 +25,12 @@ import com.openclassrooms.tourguide.model.User;
 
 public class TestPerformance {
 
-	private GpsUtil gpsUtil;
+	//private GpsUtil gpsUtil;
 	private GpsUtilService gpsUtilService;
 
 	@BeforeEach
 	public void setUp() {
-		gpsUtil = new GpsUtil();
+		GpsUtil gpsUtil = new GpsUtil();
 		AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
 		gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
 	}
@@ -60,8 +60,8 @@ public class TestPerformance {
 	@Disabled
 	@Test
 	public void highVolumeTrackLocation() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		//GpsUtil gpsUtil = new GpsUtil();
+		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		// Users should be incremented up to 100,000, and test finishes within 15
 		// minutes
 		InternalTestHelper.setInternalUserNumber(100);
@@ -86,8 +86,8 @@ public class TestPerformance {
 	@Disabled
 	@Test
 	public void highVolumeGetRewards() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		//GpsUtil gpsUtil = new GpsUtil();
+		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 
 		// Users should be incremented up to 100,000, and test finishes within 20
 		// minutes
@@ -96,7 +96,7 @@ public class TestPerformance {
 		stopWatch.start();
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
-		Attraction attraction = gpsUtil.getAttractions().get(0);
+		Attraction attraction = gpsUtilService.getAttractions().get(0);
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
 		allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));

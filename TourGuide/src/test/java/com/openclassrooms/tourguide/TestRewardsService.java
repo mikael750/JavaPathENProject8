@@ -22,27 +22,21 @@ import com.openclassrooms.tourguide.model.User;
 
 public class TestRewardsService {
 
-	private RewardsService rewardsService;
-	private GpsUtil gpsUtil;
-	private GpsUtilService gpsUtilService;
-
-	@BeforeEach
-	public void setUp() {
-		gpsUtil = new GpsUtil();
-		AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
-		gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
-		rewardsService = new RewardsService(gpsUtil, new RewardCentral());
-
-	}
+	GpsUtil gpsUtil = new GpsUtil();
+	AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
+	GpsUtilService gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
+	RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
+	TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 	@Test
 	public void userGetRewards() {
 
 		InternalTestHelper.setInternalUserNumber(0);
-		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
+		//var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
-		var user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		var attraction = gpsUtil.getAttractions().get(0);
+		var user = new User(UUID.randomUUID(),
+				"jon", "000", "jon@tourGuide.com");
+		var attraction = gpsUtilService.getAttractions().get(0);
 		user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
 		tourGuideService.trackUserLocation(user);
 		var userRewards = user.getUserRewards();
@@ -53,7 +47,7 @@ public class TestRewardsService {
 	@Test
 	public void isWithinAttractionProximity() {
 
-		var attraction = gpsUtil.getAttractions().get(0);
+		var attraction = gpsUtilService.getAttractions().get(0);
 		assertTrue(gpsUtilService.isWithinAttractionProximity(attraction, attraction));
 	}
 
@@ -62,15 +56,14 @@ public class TestRewardsService {
 	public void nearAllAttractions() {
 
 		gpsUtilService.setProximityBuffer(Integer.MAX_VALUE);
-
 		InternalTestHelper.setInternalUserNumber(1);
-		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
-		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
-		var userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
+		var user = tourGuideService.getAllUsers().get(0);
+		rewardsService.calculateRewards(user);
+		var userRewards = tourGuideService.getUserRewards(user);
 		tourGuideService.tracker.stopTracking();
 
-		assertEquals(gpsUtil.getAttractions().size(), userRewards.size());
+		assertEquals(gpsUtilService.getAttractions().size(), userRewards.size());
 	}
 
 }

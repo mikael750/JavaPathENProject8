@@ -2,6 +2,7 @@ package com.openclassrooms.tourguide.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.openclassrooms.tourguide.repository.AttractionRepository;
 import org.springframework.stereotype.Service;
@@ -18,27 +19,27 @@ import com.openclassrooms.tourguide.model.UserReward;
 public class RewardsService {
     private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
-    private final GpsUtil gpsUtil;
-	private GpsUtilService gpsUtilService;
+    //private final GpsUtil gpsUtil;
+	private final GpsUtilService gpsUtilService;
 	private final RewardCentral rewardsCentral;
 
 
-	
-	public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
-		this.gpsUtil = gpsUtil;
-		AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
-		gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
+
+	public RewardsService(GpsUtilService gpsUtilService, RewardCentral rewardCentral) {
+		this.gpsUtilService = gpsUtilService;
+		//AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
+		//gpsUtilService = new GpsUtilService(gpsUtil, attractionRepository);
 
 
 		this.rewardsCentral = rewardCentral;
 	}
-	
+
 
 	/**
 	 * @param user
 	 */
 	public void calculateRewards(User user) {
-		var userLocations = user.getVisitedLocations();
+		CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList(user.getVisitedLocations());
 		var attractions = gpsUtilService.getAttractions();//gpsUtil.getAttractions();
 		List<UserReward> rewardsToAdd = new ArrayList<>();
 
