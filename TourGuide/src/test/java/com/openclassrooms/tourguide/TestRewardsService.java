@@ -32,7 +32,7 @@ public class TestRewardsService {
 	public void userGetRewards() {
 
 		InternalTestHelper.setInternalUserNumber(0);
-		//var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
+		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		var user = new User(UUID.randomUUID(),
 				"jon", "000", "jon@tourGuide.com");

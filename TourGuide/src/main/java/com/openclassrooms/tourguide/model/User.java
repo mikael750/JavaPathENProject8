@@ -76,6 +76,7 @@ public class User {
 	}
 
 	public void addUserRewards(List<UserReward> userRewards){
+		this.userRewards.addAll(userRewards);
 	}
 
 	public List<UserReward> getUserRewards() {
