@@ -48,14 +48,14 @@ public class TestRewardsService {
 	public void isWithinAttractionProximity() {
 
 		var attraction = gpsUtilService.getAttractions().get(0);
-		assertTrue(gpsUtilService.isWithinAttractionProximity(attraction, attraction));
+		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
 
-	@Disabled // Needs fixed - can throw ConcurrentModificationException
+	@Disabled // Fixed - threw ConcurrentModificationException but return failure
 	@Test
 	public void nearAllAttractions() {
 
-		gpsUtilService.setProximityBuffer(Integer.MAX_VALUE);
+		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 		InternalTestHelper.setInternalUserNumber(1);
 
 		var user = tourGuideService.getAllUsers().get(0);
