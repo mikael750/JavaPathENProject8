@@ -2,12 +2,9 @@ package com.openclassrooms.tourguide.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.openclassrooms.tourguide.repository.AttractionRepository;
 import org.springframework.stereotype.Service;
 
-import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
@@ -48,27 +45,29 @@ public class RewardsService {
 	}
 
 	/**
-	 * @param user
+	 * Calculate rewards for a given user if the user is near an unvisited attraction,
+	 * The method adds the rewards to the user,
+	 * It uses synchronized() and irate userLocations as to not throw ConcurrentModificationException.
+	 *
+	 * @param user the user we want to calculate the rewards of
 	 */
 	public void calculateRewards(User user) {
-		CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList(user.getVisitedLocations());
+		List<VisitedLocation> userLocations = new ArrayList<>(user.getVisitedLocations());
 		var attractions = gpsUtilService.getAttractions();
-		List<UserReward> rewardsToAdd = new ArrayList<>();
 
-		//synchronized (user.getUserRewards()) {
-		for(VisitedLocation visitedLocation : userLocations) {
-			for(Attraction attraction : attractions) {
-				if(user.getUserRewards().stream().noneMatch(r ->
-						r.attraction.attractionName.equals(attraction.attractionName))) {
-					if(nearAttraction(visitedLocation, attraction)) {
-						rewardsToAdd.add(new UserReward(visitedLocation, attraction,
-								getRewardPoints(attraction, user)));
+		synchronized (user.getUserRewards()) {
+			for (VisitedLocation visitedLocation : userLocations) {
+				for (Attraction attraction : attractions) {
+					if (user.getUserRewards().stream().noneMatch(r ->
+							r.attraction.attractionName.equals(attraction.attractionName))) {
+						if (nearAttraction(visitedLocation, attraction)) {
+							user.addUserReward(new UserReward(
+									visitedLocation, attraction, getRewardPoints(attraction, user)));
+						}
 					}
 				}
 			}
 		}
-		user.addUserRewards(rewardsToAdd);
-		//}
 	}
 
 	private int getRewardPoints(Attraction attraction, User user) {

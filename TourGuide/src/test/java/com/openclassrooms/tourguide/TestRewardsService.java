@@ -8,8 +8,6 @@ import java.util.UUID;
 
 import com.openclassrooms.tourguide.repository.AttractionRepository;
 import com.openclassrooms.tourguide.service.GpsUtilService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import gpsUtil.GpsUtil;
@@ -51,7 +49,10 @@ public class TestRewardsService {
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
 
-	@Disabled // Fixed - threw ConcurrentModificationException but return failure
+	/**
+	 * test if user goes to all attractions
+	 * test nearAttraction() through the method calculateRewards
+	 */
 	@Test
 	public void nearAllAttractions() {
 
