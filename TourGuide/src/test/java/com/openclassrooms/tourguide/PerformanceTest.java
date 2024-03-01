@@ -23,7 +23,7 @@ import com.openclassrooms.tourguide.service.RewardsService;
 import com.openclassrooms.tourguide.service.TourGuideService;
 import com.openclassrooms.tourguide.model.User;
 
-public class TestPerformance {
+public class PerformanceTest {
 
 	//private GpsUtil gpsUtil;
 	private GpsUtilService gpsUtilService;

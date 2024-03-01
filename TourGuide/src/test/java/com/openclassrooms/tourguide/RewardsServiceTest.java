@@ -18,7 +18,7 @@ import com.openclassrooms.tourguide.service.RewardsService;
 import com.openclassrooms.tourguide.service.TourGuideService;
 import com.openclassrooms.tourguide.model.User;
 
-public class TestRewardsService {
+public class RewardsServiceTest {
 
 	GpsUtil gpsUtil = new GpsUtil();
 	AttractionRepository attractionRepository = new AttractionRepository(gpsUtil);
@@ -26,6 +26,9 @@ public class TestRewardsService {
 	RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 	TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
+	/**
+	 * Test if a Reward is given to a User when visiting an attraction
+	 */
 	@Test
 	public void userGetRewards() {
 
@@ -50,8 +53,8 @@ public class TestRewardsService {
 	}
 
 	/**
-	 * test if user goes to all attractions
 	 * test nearAttraction() through the method calculateRewards
+	 * if User goes through all attraction then he get a reward for each one
 	 */
 	@Test
 	public void nearAllAttractions() {

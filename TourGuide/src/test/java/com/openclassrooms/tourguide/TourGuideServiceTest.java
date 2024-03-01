@@ -22,7 +22,7 @@ import com.openclassrooms.tourguide.service.TourGuideService;
 import com.openclassrooms.tourguide.model.User;
 import tripPricer.Provider;
 
-public class TestTourGuideService {
+public class TourGuideServiceTest {
 
 	//private GpsUtil gpsUtil;
 	private GpsUtilService gpsUtilService;
