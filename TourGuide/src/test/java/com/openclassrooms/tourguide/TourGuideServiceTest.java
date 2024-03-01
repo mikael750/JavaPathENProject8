@@ -100,17 +100,16 @@ public class TourGuideServiceTest {
 		assertEquals(user.getUserId(), visitedLocation.userId);
 	}
 
-	@Disabled // Not yet implemented
 	@Test
-	public void getNearbyAttractions() {
+	public void testGetFiveNearbyAttractions() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+		tourGuideService.trackUserLocation(user);
 
-		List<AttractionDTO> attractions = tourGuideService.getNearByAttractions(user);
+		List<AttractionDTO> attractions = tourGuideService.getFiveNearByAttractions(user);
 
 		tourGuideService.tracker.stopTracking();
 

@@ -21,51 +21,70 @@ public class TourGuideController {
 
 	@Autowired
 	TourGuideService tourGuideService;
-	
+
+    /**
+     * Return a greeting when calling the default url
+     *
+     * @return String
+     */
     @RequestMapping("/")
     public String index() {
         return "Greetings from TourGuide!";
     }
-    
-    @RequestMapping("/getLocation") 
+
+    /**
+     * Get location of a given user
+     *
+     * @param userName userName
+     * @return VisitedLocation
+     */
+    @RequestMapping("/getLocation")
     public VisitedLocation getLocation(@RequestParam String userName) {
     	return tourGuideService.getUserLocation(getUser(userName));
     }
-    
-    //  TODO: Change this method to no longer return a List of Attractions.
- 	//  Instead: Get the closest five tourist attractions to the model - no matter how far away they are.
- 	//  Return a new JSON object that contains:
-    	// Name of Tourist attraction, 
-        // Tourist attractions lat/long, 
-        // The model's (the users) location lat/long,
-        // The distance in miles between the model's location and each of the attractions.
-        // The reward points for visiting each Attraction.
-        //    Note: Attraction reward points can be gathered from RewardsCentral
+
+    /**
+     * Get 5 closest attractions for a given user
+     *
+     * @param userName userName
+     * @return JSON containing a list of five nearby Attractions
+     */
     @RequestMapping("/getNearbyAttractions") 
     public List<AttractionDTO> getNearbyAttractions(@RequestParam String userName) {
         User user = tourGuideService.getUser(userName);
-        /*
-        VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-        var attraction = tourGuideService.getNearByAttractions(visitedLocation);
-        RewardCentral rewardCentral = new RewardCentral();
-        rewardCentral.getAttractionRewardPoints(attraction.get(0).attractionId,visitedLocation.userId);
-        */
-        return tourGuideService.getNearByAttractions(user);
+        return tourGuideService.getFiveNearByAttractions(user);
     }
-    
-    @RequestMapping("/getRewards") 
+
+    /**
+     * Get rewards for a given user
+     *
+     * @param userName userName
+     * @return List of UserReward
+     */
+    @RequestMapping("/getRewards")
     public List<UserReward> getRewards(@RequestParam String userName) {
     	return tourGuideService.getUserRewards(getUser(userName));
     }
-       
+
+    /**
+     * Get Trip Providers based on the user preferences
+     *
+     * @param userName userName
+     * @return List of Provider
+     */
     @RequestMapping("/getTripDeals")
     public List<Provider> getTripDeals(@RequestParam String userName) {
     	return tourGuideService.getTripDeals(getUser(userName));
     }
-    
+
+    /**
+     * Utility method to get user from service
+     *
+     * @param userName userName
+     * @return User
+     */
     private User getUser(String userName) {
     	return tourGuideService.getUser(userName);
     }
-   
 
 }
