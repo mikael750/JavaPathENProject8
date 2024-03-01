@@ -10,7 +10,7 @@ public class AttractionDTO {
     private final String attractionName;
     // Tourist attractions lat/long
     private final Location attractionLocation;
-    // The model's (the user) location lat/long
+    // The model's (the users) location lat/long
     private final Location userLocation;
     // The distance in miles between the model's location and each of the attractions
     private final double distance;

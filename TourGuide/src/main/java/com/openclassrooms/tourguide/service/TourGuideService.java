@@ -1,5 +1,6 @@
 package com.openclassrooms.tourguide.service;
 
+import com.openclassrooms.tourguide.DTO.AttractionDTO;
 import com.openclassrooms.tourguide.helper.InternalTestHelper;
 import com.openclassrooms.tourguide.tracker.Tracker;
 import com.openclassrooms.tourguide.model.User;
@@ -7,14 +8,7 @@ import com.openclassrooms.tourguide.model.UserReward;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -95,15 +89,38 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractions = new ArrayList<>();
-		for (Attraction attraction : gpsUtilService.getAttractions()) {
-			if (rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-				nearbyAttractions.add(attraction);
-			}
+	/**
+	 * Get the closest five tourist attractions to the user
+	 *
+	 * @param user user
+	 * @return List AttractionDTO
+	 */
+	public List<AttractionDTO> getNearByAttractions(User user) {
+		List<Attraction> getAttractions = gpsUtilService.getAttractions();
+		List<AttractionDTO> attractionDTOList = new ArrayList<>();
+		Location userLocation = getUserLocation(user).location;
+
+		for (Attraction attraction : getAttractions) {
+			var attractionLocation = new Location(attraction.latitude, attraction.longitude);
+			var distance = rewardsService.getDistance(attractionLocation, userLocation);
+			var rewardPoint = rewardsService.getRewardPoints(attraction, user);
+
+			attractionDTOList.add(new AttractionDTO(attraction.attractionName, attractionLocation,
+					userLocation, distance, rewardPoint));
 		}
 
-		return nearbyAttractions;
+		return getAttractionDTOList(attractionDTOList);
+	}
+
+	/**
+	 * Sort a list of attractions limited to 5 maximum
+	 *
+	 * @param attractionDTOList attractionDTOList
+	 * @return attractionDTOList with size <= 5
+	 */
+	private List<AttractionDTO> getAttractionDTOList(List<AttractionDTO> attractionDTOList) {
+		return attractionDTOList.stream().sorted(Comparator.comparingDouble(AttractionDTO::getDistance))
+						.limit(5).collect(Collectors.toList());
 	}
 
 	private void addShutDownHook() {
