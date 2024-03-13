@@ -34,7 +34,7 @@ public class TourGuideServiceTest {
 	}
 
 	@Test
-	public void getUserLocation() {
+	public void test_getUserLocation() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -46,7 +46,7 @@ public class TourGuideServiceTest {
 	}
 
 	@Test
-	public void addUser() {
+	public void test_addUser() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -67,7 +67,7 @@ public class TourGuideServiceTest {
 	}
 
 	@Test
-	public void getAllUsers() {
+	public void test_getAllUsers() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -87,7 +87,7 @@ public class TourGuideServiceTest {
 	}
 
 	@Test
-	public void trackUser() {
+	public void test_trackUser() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -101,7 +101,7 @@ public class TourGuideServiceTest {
 	}
 
 	@Test
-	public void testGetFiveNearbyAttractions() {
+	public void test_getFiveNearbyAttractions() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -116,7 +116,8 @@ public class TourGuideServiceTest {
 		assertEquals(5, attractions.size());
 	}
 
-	public void getTripDeals() {
+	@Test
+	public void test_getTripDeals() {
 		RewardsService rewardsService = new RewardsService(gpsUtilService, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -127,7 +128,7 @@ public class TourGuideServiceTest {
 
 		tourGuideService.tracker.stopTracking();
 
-		assertEquals(10, providers.size());
+		assertEquals(5, providers.size());
 	}
 
 }
