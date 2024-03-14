@@ -9,6 +9,8 @@ import com.openclassrooms.tourguide.model.UserReward;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.concurrent.CompletableFuture;
@@ -32,7 +34,7 @@ public class TourGuideService {
 	public final Tracker tracker;
 	boolean testMode = true;
 	private final GpsUtilService gpsUtilService;
-
+	private ExecutorService executorService = Executors.newFixedThreadPool(200);
 
 	public TourGuideService(GpsUtilService gpsUtilService, RewardsService rewardsService) {
 		this.gpsUtilService = gpsUtilService;
@@ -90,13 +92,13 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
-	public CompletableFuture<VisitedLocation> trackUserLocation(User user) {
-		return CompletableFuture.supplyAsync(() -> {
+	public void trackUserLocation(User user) {
+		CompletableFuture.supplyAsync(() -> {
 			VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 			user.addToVisitedLocations(visitedLocation);
 			rewardsService.calculateRewards(user);
 			return visitedLocation;
-		});
+		}, executorService);
 	}
 
 	/**
