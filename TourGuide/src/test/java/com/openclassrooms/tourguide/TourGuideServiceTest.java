@@ -34,7 +34,7 @@ public class TourGuideServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-		InternalTestHelper.setInternalUserNumber(0);
+		InternalTestHelper.setInternalUserNumber(1);
 		tourGuideService.addUser(user);
 		tourGuideService.addUser(user2);
 	}
@@ -42,7 +42,7 @@ public class TourGuideServiceTest {
 	@Test
 	public void test_getUserLocation() {
 
-		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+		VisitedLocation visitedLocation = tourGuideService.trackUserLocationSync(user);
 
 		tourGuideService.tracker.stopTracking();
 
@@ -75,7 +75,7 @@ public class TourGuideServiceTest {
 	@Test
 	public void test_trackUser() {
 
-		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+		VisitedLocation visitedLocation = tourGuideService.trackUserLocationSync(user);
 
 		tourGuideService.tracker.stopTracking();
 
