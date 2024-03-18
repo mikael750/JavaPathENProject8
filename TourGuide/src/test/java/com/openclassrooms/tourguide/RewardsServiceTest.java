@@ -32,7 +32,7 @@ public class RewardsServiceTest {
 	@Test
 	public void userGetRewards() {
 
-		InternalTestHelper.setInternalUserNumber(0);
+		InternalTestHelper.setInternalUserNumber(1);
 		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		var user = new User(UUID.randomUUID(),
@@ -40,6 +40,7 @@ public class RewardsServiceTest {
 		var attraction = gpsUtilService.getAttractions().get(0);
 		user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
 		tourGuideService.trackUserLocation(user);
+		rewardsService.calculateRewards(user);
 		var userRewards = user.getUserRewards();
 		tourGuideService.tracker.stopTracking();
 		assertEquals(1, userRewards.size());
