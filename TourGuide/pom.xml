@@ -52,7 +52,7 @@
 			<artifactId>gpsUtil</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/libs/gpsUtil.jar</systemPath>
+			<systemPath>${pom.basedir}/libs/gpsUtil.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -60,7 +60,7 @@
 			<artifactId>RewardCentral</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/libs/RewardCentral.jar</systemPath>
+			<systemPath>${pom.basedir}/libs/RewardCentral.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -68,11 +68,7 @@
 			<artifactId>TripPricer</artifactId>
 			<version>1.0</version> <!-- Remplacez par la version réelle si connue -->
 			<scope>system</scope>
-			<systemPath>${basedir}/libs/TripPricer.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+			<systemPath>${pom.basedir}/libs/TripPricer.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

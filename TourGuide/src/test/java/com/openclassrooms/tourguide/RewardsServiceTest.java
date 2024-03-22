@@ -30,7 +30,7 @@ public class RewardsServiceTest {
 	 * Test if a Reward is given to a User when visiting an attraction
 	 */
 	@Test
-	public void userGetRewards() {
+	public void test_userGetRewards() {
 
 		InternalTestHelper.setInternalUserNumber(1);
 		var tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
@@ -47,7 +47,7 @@ public class RewardsServiceTest {
 	}
 
 	@Test
-	public void isWithinAttractionProximity() {
+	public void test_isWithinAttractionProximity() {
 
 		var attraction = gpsUtilService.getAttractions().get(0);
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
@@ -58,7 +58,7 @@ public class RewardsServiceTest {
 	 * if User goes through all attraction then he get a reward for each one
 	 */
 	@Test
-	public void nearAllAttractions() {
+	public void test_nearAllAttractions() {
 
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 		InternalTestHelper.setInternalUserNumber(1);

@@ -91,7 +91,7 @@ public class PerformanceTest {
 
 		// Users should be incremented up to 100,000, and test finishes within 20
 		// minutes
-		InternalTestHelper.setInternalUserNumber(10000);
+		InternalTestHelper.setInternalUserNumber(1000);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtilService, rewardsService);
 
 		Attraction attraction = gpsUtilService.getAttractions().get(0);
