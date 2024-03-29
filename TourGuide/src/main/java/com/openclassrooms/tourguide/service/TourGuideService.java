@@ -70,12 +70,23 @@ public class TourGuideService {
 		return internalUserMap.values().stream().collect(Collectors.toList());
 	}
 
+	/**
+	 * Add an user
+	 *
+	 * @param user user
+	 */
 	public void addUser(User user) {
 		if (!internalUserMap.containsKey(user.getUserName())) {
 			internalUserMap.put(user.getUserName(), user);
 		}
 	}
 
+	/**
+	 * Get Trip Providers based on the user preferences
+	 *
+	 * @param user user
+	 * @return list of providers
+	 */
 	public List<Provider> getTripDeals(User user) {
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(UserReward::getRewardPoints).sum();
 		List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(),
@@ -85,6 +96,10 @@ public class TourGuideService {
 		return providers;
 	}
 
+	/**
+	 * @param user
+	 * @return
+	 */
 	public VisitedLocation trackUserLocationSync(User user) {
 		VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 		user.addToVisitedLocations(visitedLocation);
@@ -92,6 +107,9 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
+	/**
+	 * @param user
+	 */
 	public void trackUserLocation(User user) {
 		CompletableFuture.supplyAsync(() -> {
 			VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());

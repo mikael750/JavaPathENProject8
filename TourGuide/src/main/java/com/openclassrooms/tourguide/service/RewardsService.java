@@ -35,11 +35,25 @@ public class RewardsService {
 		proximityBuffer = defaultProximityBuffer;
 	}
 
+	/**
+	 * Checks if the user is within an attraction
+	 *
+	 * @param attraction attraction
+	 * @param location location
+	 * @return boolean
+	 */
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
 		int attractionProximityRange = 200;
 		return !(getDistance(attraction, location) > attractionProximityRange);
 	}
 
+	/**
+	 * inform if the Location of user is near an attraction according to the proximityBuffer
+	 *
+	 * @param visitedLocation visitedLocation
+	 * @param attraction     * @param attraction
+	 * @return boolean
+	 */
 	public boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
 		return !(getDistance(attraction, visitedLocation.location) > proximityBuffer);
 	}
@@ -70,10 +84,24 @@ public class RewardsService {
 		}
 	}
 
+	/**
+	 * Get the reward points of a user for visiting an attraction
+	 *
+	 * @param attraction attraction
+	 * @param user user
+	 * @return integer
+	 */
 	public int getRewardPoints(Attraction attraction, User user) {
 		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
 	}
 
+	/**
+	 * get the distance between two location
+	 *
+	 * @param loc1 loc1
+	 * @param loc2 loc2
+	 * @return the distance in miles
+	 */
 	public double getDistance(Location loc1, Location loc2) {
 		double lat1 = Math.toRadians(loc1.latitude);
 		double lon1 = Math.toRadians(loc1.longitude);
